@@ -23,10 +23,14 @@ class Dashboard extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(15, 0, 0, 30),
             child: Material(
               color: Colors.blueGrey[600],
+              borderRadius: BorderRadius.circular(10),
               child: InkWell(
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const ContatctsList()));
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ContatctsList(),
+                    ),
+                  );
                 },
                 child: Container(
                   padding: const EdgeInsets.all(12.0),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_contacts/database/dao/contacts.dart';
 import 'package:my_contacts/models/contact.dart';
 
 class ContactForm extends StatefulWidget {
@@ -10,13 +11,13 @@ class ContactForm extends StatefulWidget {
 
 class _ContactFormState extends State<ContactForm> {
   final TextEditingController _nameController = TextEditingController();
-
   final TextEditingController _phoneController = TextEditingController();
+  final ContactDao _contactDao = ContactDao();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Novo contato')),
+      appBar: AppBar(title: const Text('Novo contato')),
       body: Padding(
         padding: const EdgeInsets.all(18.0),
         child: Container(
@@ -48,7 +49,9 @@ class _ContactFormState extends State<ContactForm> {
                     if (name.isNotEmpty && phone.isNotEmpty) {
                       final Contact newContact =
                           Contact(name: name, phone: phone);
-                      Navigator.pop(context, newContact);
+                      _contactDao
+                          .save(newContact)
+                          .then((id) => Navigator.pop(context));
                     }
                   },
                   label: const Text('Salvar', style: TextStyle(fontSize: 18)),
