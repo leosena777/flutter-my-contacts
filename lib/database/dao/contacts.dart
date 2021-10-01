@@ -47,4 +47,20 @@ class ContactDao {
     }
     return contacts;
   }
+
+  Future<int> delete(int id) async {
+    final Database db = await createDatabase();
+    return db.delete(tableName, where: '$_id = ?', whereArgs: [id]);
+  }
+
+  Future<int> update(Contact contact) async {
+    final Database db = await createDatabase();
+    Map<String, dynamic> contactMap = _toMap(contact);
+    return db.update(
+      tableName,
+      contactMap,
+      where: '$_id = ?',
+      whereArgs: [contact.id],
+    );
+  }
 }

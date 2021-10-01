@@ -49,7 +49,17 @@ class _ContatctsListState extends State<ContatctsList> {
                 return ListView.builder(
                   itemBuilder: (context, index) {
                     final Contact contact = contacts[index];
-                    return ContactItem(contact: contact);
+                    return ContactItem(
+                      contact: contact,
+                      onDelete: (id) {
+                        setState(() {
+                          _contactDao.delete(id);
+                        });
+                      },
+                      onUpdate: () {
+                        setState(() {});
+                      },
+                    );
                   },
                   itemCount: contacts.length,
                 );
@@ -63,7 +73,7 @@ class _ContatctsListState extends State<ContatctsList> {
         onPressed: () {
           Navigator.of(context)
               .push(MaterialPageRoute(
-                builder: (context) => const ContactForm(),
+                builder: (context) => ContactForm(),
               ))
               .then((value) => {setState(() {})});
         },
@@ -75,12 +85,24 @@ class _ContatctsListState extends State<ContatctsList> {
 
 class ContactItem extends StatelessWidget {
   final Contact contact;
+  final Function onDelete;
+  final Function onUpdate;
 
-  const ContactItem({Key? key, required this.contact}) : super(key: key);
+  const ContactItem({
+    Key? key,
+    required this.contact,
+    required this.onDelete,
+    required this.onUpdate,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      margin: const EdgeInsets.only(top: 8),
       child: ListTile(
         title: Text(
           contact.name,
@@ -89,6 +111,48 @@ class ContactItem extends StatelessWidget {
         subtitle: Text(
           contact.phone,
           style: const TextStyle(fontSize: 16),
+        ),
+        trailing: Material(
+          borderRadius: BorderRadius.circular(100),
+          color: Colors.transparent,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              IconButton(
+                splashRadius: 22,
+                icon: Icon(
+                  Icons.edit,
+                  color: Theme.of(context).primaryColor,
+                ),
+                onPressed: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(
+                        builder: (context) => ContactForm(
+                          contact: contact,
+                        ),
+                      ))
+                      .then((value) => {onUpdate()});
+                },
+              ),
+              IconButton(
+                splashRadius: 22,
+                icon: Icon(
+                  Icons.delete,
+                  color: Theme.of(context).primaryColor,
+                ),
+                onPressed: () {
+                  onDelete(contact.id);
+                },
+              ),
+            ],
+          ),
+        ),
+        leading: CircleAvatar(
+          backgroundColor: Theme.of(context).primaryColor,
+          child: Text(
+            contact.name[0].toUpperCase(),
+            style: const TextStyle(fontSize: 22, color: Colors.white),
+          ),
         ),
       ),
     );

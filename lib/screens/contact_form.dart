@@ -3,7 +3,8 @@ import 'package:my_contacts/database/dao/contacts.dart';
 import 'package:my_contacts/models/contact.dart';
 
 class ContactForm extends StatefulWidget {
-  const ContactForm({Key? key}) : super(key: key);
+  final Contact? contact;
+  ContactForm({Key? key, this.contact}) : super(key: key);
 
   @override
   State<ContactForm> createState() => _ContactFormState();
@@ -16,8 +17,17 @@ class _ContactFormState extends State<ContactForm> {
 
   @override
   Widget build(BuildContext context) {
+    final Contact? editContact = widget.contact;
+    print("$editContact");
+
+    if (editContact != null) {
+      _nameController.text = editContact.name;
+      _phoneController.text = editContact.phone;
+    }
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Novo contato')),
+      appBar: AppBar(
+          title: Text(editContact == null ? "Novo Contato" : "Editar Contato")),
       body: Padding(
         padding: const EdgeInsets.all(18.0),
         child: Container(
@@ -49,9 +59,17 @@ class _ContactFormState extends State<ContactForm> {
                     if (name.isNotEmpty && phone.isNotEmpty) {
                       final Contact newContact =
                           Contact(name: name, phone: phone);
-                      _contactDao
-                          .save(newContact)
-                          .then((id) => Navigator.pop(context));
+
+                      if (editContact != null) {
+                        newContact.id = editContact.id;
+                        _contactDao
+                            .update(newContact)
+                            .then((id) => Navigator.pop(context));
+                      } else {
+                        _contactDao
+                            .save(newContact)
+                            .then((id) => Navigator.pop(context));
+                      }
                     }
                   },
                   label: const Text('Salvar', style: TextStyle(fontSize: 18)),

@@ -12,10 +12,11 @@ class MyContacts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData.from(
-          colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blueGrey),
-        ).copyWith(scaffoldBackgroundColor: const Color(0xFF98A7Af)),
-        home: const Dashboard());
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.from(
+        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blueGrey),
+      ).copyWith(scaffoldBackgroundColor: const Color(0xFF98A7Af)),
+      home: const Dashboard(),
+    );
   }
 }
