@@ -51,29 +51,34 @@ class _ContactFormState extends State<ContactForm> {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 32),
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    final String name = _nameController.text;
-                    final String phone = _phoneController.text;
+                child: SizedBox(
+                  height: 50,
+                  width: 150,
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      final String name = _nameController.text;
+                      final String phone = _phoneController.text;
 
-                    if (name.isNotEmpty && phone.isNotEmpty) {
-                      final Contact newContact =
-                          Contact(name: name, phone: phone);
+                      if (name.isNotEmpty && phone.isNotEmpty) {
+                        final Contact newContact =
+                            Contact(name: name, phone: phone);
 
-                      if (editContact != null) {
-                        newContact.id = editContact.id;
-                        _contactDao
-                            .update(newContact)
-                            .then((id) => Navigator.pop(context));
-                      } else {
-                        _contactDao
-                            .save(newContact)
-                            .then((id) => Navigator.pop(context));
+                        if (editContact != null) {
+                          newContact.id = editContact.id;
+                          _contactDao
+                              .update(newContact)
+                              .then((id) => Navigator.pop(context));
+                        } else {
+                          _contactDao
+                              .save(newContact)
+                              .then((id) => Navigator.pop(context));
+                        }
                       }
-                    }
-                  },
-                  label: const Text('Salvar', style: TextStyle(fontSize: 18)),
-                  icon: const Icon(Icons.save),
+                    },
+                    label: const Text('Salvar', style: TextStyle(fontSize: 18)),
+                    icon: const Icon(Icons.save),
+                    style: const ButtonStyle(),
+                  ),
                 ),
               )
             ],
